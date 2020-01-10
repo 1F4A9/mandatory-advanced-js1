@@ -4,37 +4,50 @@ class Login extends React.Component {
     constructor(props) {
         super(props);
 
-        this.onSubmit = this.onSubmit.bind(this);
-        this.onMouseOver = this.onMouseOver.bind(this);
-    }
+        this.state = {
+            validation: true,
+        }
 
-    onMouseOver() {
-        console.log('hej')
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
     onSubmit(e) {
         e.preventDefault();
 
+        const { username, handleSubmit } = this.props;
+
         let validation = /^[a-zA-Z_-\s]{1,12}$/.test(this.props.username);
 
-        validation ? this.props.handleSubmit(this.props.username) : this.props.handleSubmit('');
+        this.setState({ validation })
+        validation ? handleSubmit(username) : handleSubmit('');
     }
 
     render() {
-        let validation = <p>The Username must be between 1-12 and can only contain alphanumeric characters, spaces and the following characters: '-', '_'</p>;
+        const validationMessage = <p>The Username must be between 1-12 and can only contain alphanumeric characters, spaces and the following characters: '-', '_'</p>;
+        const validation = this.state.validation;
+        const onValid = (
+            <input
+                id="username-input"
+                type="text"
+                placeholder="username"
+                onChange={this.props.handleChange}
+            />)
+        const notValid = (
+            <input
+                id="username-input"
+                type="text"
+                placeholder="username"
+                onChange={this.props.handleChange}
+                style={{ borderColor: 'red' }}
+            />)
 
         return (
             <div className="login-container">
                 <div className="form-container">
                     <h1>Chat App</h1>
-                    {validation}
+                    {validationMessage}
                     <form id="login-form" onSubmit={this.onSubmit}>
-                        <input
-                            id="username-input"
-                            type="text"
-                            placeholder="username"
-                            onChange={this.props.handleChange}
-                        />
+                        {validation ? onValid : notValid}
                         <input
                             id="login-btn"
                             value="Sign in"

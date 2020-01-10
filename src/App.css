@@ -23,6 +23,7 @@ header {
     background-color: #3498db;
     position: absolute;
     top: 0px;
+    z-index: 1;
 }
 
 header #btn-close {

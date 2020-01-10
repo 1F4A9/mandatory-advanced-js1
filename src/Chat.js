@@ -1,5 +1,8 @@
 import React from 'react';
 import io from 'socket.io-client';
+import Linkify from 'react-linkify';
+import Emojify from 'react-emojione';
+import ScrollToBottom from 'react-scroll-to-bottom';
 
 class Chat extends React.Component {
     constructor(props) {
@@ -7,10 +10,9 @@ class Chat extends React.Component {
 
         this.state = {
             socket: '',
-            currentInput: '',
-            userMessages: [],
             userData: [],
             newMessages: [],
+            currentInput: '',
         }
 
         this.backButton = this.backButton.bind(this);
@@ -19,7 +21,6 @@ class Chat extends React.Component {
     }
 
     componentDidMount() {
-        const newMessages = [];
         const socket = io('http://3.120.96.16:3000');
         this.setState({ socket });
 
@@ -28,8 +29,9 @@ class Chat extends React.Component {
         })
 
         socket.on('new_message', (data) => {
-            newMessages.push(data);
-            this.setState({ newMessages });
+            let messages = this.state.newMessages;
+            messages.push(data);
+            this.setState({ newMessages: messages });
         })
     }
 
@@ -53,27 +55,33 @@ class Chat extends React.Component {
         e.preventDefault();
 
         const username = this.props.username;
-        const { currentInput, socket, userMessages } = this.state;
+        const { currentInput, socket, newMessages } = this.state;
+        const clientMessage = {
+            username: username,
+            content: currentInput,
+            id: Math.random()
+        }
 
-        userMessages.push(currentInput);
-        this.setState({ userMessages })
+        newMessages.push(clientMessage)
+
+        this.setState({ newMessages })
 
         socket.emit('message', {
             username: username,
             content: currentInput,
         })
+
+        this.setState({ currentInput: '' })
     }
 
     render() {
-        const { newMessages, userData, userMessages } = this.state;
+        const { newMessages, userData } = this.state;
         const username = this.props.username;
 
         // kopiera värden med rest: const copyOfA = {...a};
 
         // const { onChange, ...rest } = this.props; -> innehåller allting i this.props 
         // förutom onChange
-
-        // likify och mojify
 
         return (
             <>
@@ -87,11 +95,14 @@ class Chat extends React.Component {
                                 x
                         </button>
                         </header>
-                        <div className="message-area">
-                            {userData.map(data => <p key={data.id}>{data.username} {data.content}</p>)}
-                            {newMessages.map(data => <p key={data.id}>{data.username} {data.content}</p>)}
-                            {userMessages.map((data, i) => <p key={i}>{username} {data}</p>)}
-                        </div>
+                        <ScrollToBottom className="message-area">
+                            <Linkify>
+                                <Emojify>
+                                    {userData.map(data => <p key={data.id}>{data.username} {data.content}</p>)}
+                                    {newMessages.map(data => <p key={data.id}>{data.username} {data.content}</p>)}
+                                </Emojify>
+                            </Linkify>
+                        </ScrollToBottom>
                         <div id="controls">
                             <form id="textbox" onSubmit={this.onSubmit}>
                                 <input
