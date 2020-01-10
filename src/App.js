@@ -2,7 +2,6 @@ import React from 'react';
 import './App.css';
 import Login from './Login';
 import Chat from './Chat';
-import io from 'socket.io-client';
 
 
 class App extends React.Component {
@@ -15,7 +14,8 @@ class App extends React.Component {
         }
 
         this.loginSubmit = this.loginSubmit.bind(this);
-        this.loginChange = this.loginChange.bind(this);
+        this.loginInputChange = this.loginInputChange.bind(this);
+        this.chatBackButton = this.chatBackButton.bind(this);
     }
 
     loginSubmit(username) {
@@ -24,62 +24,36 @@ class App extends React.Component {
         if (username) this.setState({ renderLogin: false });
     }
 
-    loginChange(e) {
+    loginInputChange(e) {
         let username = e.target.value;
         this.setState({ username })
+    }
+
+    chatBackButton(username) {
+        if (username) this.setState({ renderLogin: true });
     }
 
     render() {
         const router = this.state.renderLogin;
         const login = (
             <Login
-                handleChange={this.loginChange}
+                handleChange={this.loginInputChange}
                 handleSubmit={this.loginSubmit}
                 username={this.state.username}
             />)
+        const chat = (
+            <Chat
+                backButton={this.chatBackButton}
+                username={this.state.username}
+            />
+        )
 
         return (
             <div className="App">
-                {router ? login : <Chat />}
+                {router ? login : chat}
             </div>
         );
     }
 }
 
 export default App;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // socket.on('messages', (data) => {
-        //     console.log(data)
-        // });
-
-        // socket.on('new_message', (data) => {
-        //     console.log(data)
-        // });
-
-        // socket.emit('message', {
-        //     username: 'Emil',
-        //     content: 'hej, från chat-app',
-        // });
