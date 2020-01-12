@@ -56,15 +56,17 @@ class Chat extends React.Component {
 
         const username = this.props.username;
         const { currentInput, socket, newMessages } = this.state;
-        const clientMessage = {
-            username: username,
-            content: currentInput,
-            id: Math.random()
+
+        if (currentInput) {
+            const clientMessage = {
+                username: username,
+                content: currentInput,
+                id: Math.random()
+            }
+
+            newMessages.push(clientMessage)
+            this.setState({ newMessages })
         }
-
-        newMessages.push(clientMessage)
-
-        this.setState({ newMessages })
 
         socket.emit('message', {
             username: username,
@@ -98,8 +100,8 @@ class Chat extends React.Component {
                         <ScrollToBottom className="message-area">
                             <Linkify>
                                 <Emojify>
-                                    {userData.map(data => <p key={data.id}>{data.username} {data.content}</p>)}
-                                    {newMessages.map(data => <p key={data.id}>{data.username} {data.content}</p>)}
+                                    {userData.map(data => <p key={data.id}><b>{data.username}</b> {data.content}</p>)}
+                                    {newMessages.map(data => <p key={data.id}><b>{data.username}</b> {data.content}</p>)}
                                 </Emojify>
                             </Linkify>
                         </ScrollToBottom>
