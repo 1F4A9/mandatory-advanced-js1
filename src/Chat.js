@@ -10,9 +10,9 @@ class Chat extends React.Component {
 
         this.state = {
             socket: '',
+            currentInput: '',
             userData: [],
             newMessages: [],
-            currentInput: '',
         }
 
         this.backButton = this.backButton.bind(this);
@@ -38,7 +38,7 @@ class Chat extends React.Component {
     componentWillUnmount() {
         let socket = this.state.socket;
 
-        socket.off('new_message');
+        socket.off();
     }
 
     backButton() {
@@ -79,11 +79,6 @@ class Chat extends React.Component {
     render() {
         const { newMessages, userData } = this.state;
         const username = this.props.username;
-
-        // kopiera värden med rest: const copyOfA = {...a};
-
-        // const { onChange, ...rest } = this.props; -> innehåller allting i this.props 
-        // förutom onChange
 
         return (
             <>

@@ -16,7 +16,7 @@ class Login extends React.Component {
 
         const { username, handleSubmit } = this.props;
 
-        let validation = /^[a-zA-Z_-\s]{1,12}$/.test(this.props.username);
+        let validation = /^[a-zA-Z0-9_-\s]{1,12}$/.test(this.props.username);
 
         this.setState({ validation })
         validation ? handleSubmit(username) : handleSubmit('');

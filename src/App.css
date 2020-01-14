@@ -34,7 +34,7 @@ header #btn-close {
 
 .message-area {
     width: 100%;
-    overflow-y: auto; /*styla skiten ur denna*/
+    overflow-y: auto;
     display: block;
 }
 
