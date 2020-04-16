@@ -1,68 +1,76 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Running
+Clone repository.
+Run npm install.
+Run npm start.
+Go to http://localhost:3000.
 
-In the project directory, you can run:
+## Assignment instructions
+In this exercise you will create a simple chat application using React. The backend server is
+provided.<br/><br/>
+A socket.io server is provided at: http://3.120.96.16:3000 (This URL could change).
 
-### `npm start`
+## Events
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The server sends the following events
+<ul>
+  <li><i>messages</i> - This event is sent automatically when a client connects and will give a list of all messages on the server</li>
+  <li><i>new_message</i> - This event is sent to all clients (except the sender) when a new message is sent to the server</li>
+</ul>
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+A message sent from the server has the following structure
 
-### `npm test`
+```
+{
+username: “A username”,
+content: “A message”,
+timestamp: 1551191228686, // A timestamp in milliseconds
+id: “message-120”, // A unique ID
+}
+```
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+To send a new message to the server an event called “message” is sent from the client. The message should have the following form:
 
-### `npm run build`
+```
+{
+username: “A username”,
+content: “A message”,
+timestamp: 1551191228686, // A timestamp in milliseconds
+id: “message-120”, // A unique ID
+}
+```
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## The client
+Your task is to implement a client for this server. The client should be implemented using React and contain two views:
+<ul>
+  <li>A "login" screen where the user inputs a username</li>
+  <li>A "chat" screen that shows all the messages and contains a text input field where the user can add new messages</li>
+</ul>
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## Validation
+The server has some limitations on the username and content
+<ul>
+  <li>The username can only contain alphanumeric characters, "-", "_" and spaces and must be between 1 and 12 characters long</li>
+  <li>The content must be between 1 and 200 characters long</li>
+</ul>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+This validation should be added to the client.
 
-### `npm run eject`
+## Emojis
+The client should handle emojis, similar to how it works in Slack.
+E.g. if the message contains the string ":heart:" it should be replaced with a heart emoji :heart:. You are required to support at least three different emojis.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Links
+If a message contains a URL it should be automatically converted to a link.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+## Requirements
+The client has the following requirements
+<ul>
+  <li>It should contain a “login” screen with a text input and a button. This screen is shown when the app is opened.</li>
+  <li>When a username is submitted the user is shown a "chat" screen with a text input for ending messages and a list of messages./li>
+  <li>The message list should be populated with the messages received from the server and new messages should be added automatically (including messages sent from the client)</li>
+  <li>The chat screen should contain a “close” button so the user can return to the "login" screen</li>
+  <li>Support for emojis</li>
+  <li>Automatically convert URLs into links</li>
+</ul>
